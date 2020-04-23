@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farinfo.benefit.mapper.BenefitMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.farinfo.benefit.entity.Benefit">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="pics" property="pics" />
+        <result column="vote_start_time" property="voteStartTime" />
+        <result column="vote_end_time" property="voteEndTime" />
+        <result column="check_time" property="checkTime" />
+        <result column="grant_time" property="grantTime" />
+        <result column="content" property="content" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, pics,vote_start_time, vote_end_time, check_time, grant_time, content, status, create_time
+    </sql>
+
+    <!--分页查询活动简单信息列表（不包含活动说明）-->
+    <select id="pageQueryBenefitSimpleVO" resultType="com.farinfo.benefit.beans.vo.SimpleBenefitVO">
+        select id id,title title,pics pics,`status` `status`  from benefit order by create_time desc
+    </select>
+</mapper>
