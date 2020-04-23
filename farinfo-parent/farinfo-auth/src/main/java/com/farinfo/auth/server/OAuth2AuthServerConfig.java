@@ -10,11 +10,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 认证服务器配置类
@@ -36,12 +40,18 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
     private AuthenticationManager authenticationManager;
 
 
+
+
     //tokenStore是进行存取token的接口，默认内存的实现还有redis，jdbc，jwt的实现
     @Bean
     public TokenStore tokenStore(){
         return new JwtTokenStore(jwtTokenEnhancer());//jwt存取token
     }
-
+    //Token增强，添加额外参数
+    @Bean
+    public CustomTokenEnhancer customTokenEnhancer(){
+        return new CustomTokenEnhancer();
+    }
 
 
     //  这里必须声明为 public的@Bean 才能把拿jwt解析的key的服务暴露出去，否则资源服务器会报异常
@@ -53,6 +63,7 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
          */
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setSigningKey("lihaoyang");
+
         return converter;
     }
 
@@ -80,13 +91,21 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
+        //      将增强的token设置到增强链中
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        enhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer(), jwtTokenEnhancer()));
+
+
         //传给他一个authenticationManager用来校验传过来的用户信息是不是合法的,注进来一个，自己实现
         endpoints
                 //这里指定userDetailsService是专门给refresh_token用的，其他的四种授权模式不需要这个
                 .userDetailsService(userDetailsService)
                 .tokenStore(tokenStore()) //告诉服务器要用自定义的tokenStore里去存取token
-                .tokenEnhancer(jwtTokenEnhancer()) //加入jwt需要用到
-                .authenticationManager(authenticationManager);
+                .tokenEnhancer(enhancerChain)//token增强
+                .authenticationManager(authenticationManager)
+
+                ;
     }
 
 

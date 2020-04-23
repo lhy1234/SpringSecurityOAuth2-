@@ -24,11 +24,29 @@
         <qc.cos.version>5.6.5</qc.cos.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swaggerui.version>2.9.2</swaggerui.version>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.0.2.RELEASE</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>

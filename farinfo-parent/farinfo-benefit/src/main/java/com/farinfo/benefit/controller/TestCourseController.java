@@ -4,6 +4,7 @@ import com.farinfo.benefit.beans.dto.Course;
 import com.farinfo.benefit.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class TestCourseController {
 
     @GetMapping("/me")
     public SysUser userMe(@AuthenticationPrincipal SysUser sysUser){
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.err.println("公益 ====sysUser ："+sysUser);
         return sysUser;
     }

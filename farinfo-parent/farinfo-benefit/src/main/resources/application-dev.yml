@@ -50,6 +50,7 @@ security:
     resource:
       jwt:
         key-uri:  http://localhost:8002/oauth/token_key  #获取解析jwt，验签名key的路径
+      #####token-info-uri user-info-uri:二者皆是为了check token，并且顺带返回了用户信息，配置信息位置在资源服务器上
       #token-info-uri: http://localhost:8002/oauth/check_token
       user-info-uri: http://localhost:8002/users/me
     client:
