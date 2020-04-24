@@ -11,6 +11,7 @@ import com.farinfo.benefit.service.BenefitService;
 import com.farinfo.benefit.utils.RedisUtil;
 import com.farinfo.benefit.utils.SysConstants;
 import com.farinfo.benefit.utils.TimeUtil;
+import com.farinfo.benefit.utils.UserHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.time.DateUtils;
@@ -40,6 +41,7 @@ import java.util.Map;
 @RequestMapping("/activityVote")
 public class ActivityVoteController {
 
+
     @Autowired
     private HttpServletRequest request;
 
@@ -64,6 +66,7 @@ public class ActivityVoteController {
     @ApiOperation("投票")
     @PostMapping("/vote")
     public Result vote(@RequestBody ActivityVote entity){
+
         Benefit benefit = benefitService.getById(entity.getBenefitId());
         if(benefit == null){
             return Result.error(ErrorEnum.ACTIVITY_NOTEXIST);
@@ -83,7 +86,8 @@ public class ActivityVoteController {
         long voteNum = redisUtil.incr(redisKey,1);
         redisUtil.expire(redisKey, TimeUtil.getSeconds());
         entity.setCreateTime(new Date());
-        activityVoteService.save(entity);
+        activityVoteService.vote(entity);
+
         return Result.ok((3-voteNum)); //返回剩余次数
     }
 

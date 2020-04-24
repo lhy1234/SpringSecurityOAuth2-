@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ActivityVoteService extends IService<ActivityVote> {
 
+
+
+    void vote(ActivityVote activityVote);
 }

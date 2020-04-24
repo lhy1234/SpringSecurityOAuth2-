@@ -57,15 +57,15 @@ swagger2:
 
 
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://192.168.1.195:8761/eureka/
-  instance:
-    # 是否注册IP到eureka server，如不指定或设为false，那就会注册主机名到eureka server
-    prefer-ip-address: true
-    ip-address: 192.168.1.100
-    hostname: 192.168.1.100
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://192.168.1.195:8761/eureka/
+#  instance:
+#    # 是否注册IP到eureka server，如不指定或设为false，那就会注册主机名到eureka server
+#    prefer-ip-address: true
+#    ip-address: 192.168.1.100
+#    hostname: 192.168.1.100
 
 
 jwt:
