@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.farinfo.benefit.beans.Result;
+import com.farinfo.benefit.beans.vo.BenefitDetailVO;
 import com.farinfo.benefit.beans.vo.SimpleBenefitVO;
 import com.farinfo.benefit.entity.Benefit;
 import com.farinfo.benefit.entity.BenefitActivity;
@@ -17,12 +18,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.RandomUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -73,15 +74,26 @@ public class BenefitController {
     }
 
     /**
+     * TODO:获取是否是医生
      * 查询活动详情
      */
     @ApiOperation("查询活动详情")
     @GetMapping("/detail/{id}")
     public Result detail(@PathVariable("id") int id){
+        Map<String,Object> resultMap = Maps.newHashMap();
+        resultMap.put("isDoctor",RandomUtils.nextInt()%2==0?1:0);
+
         //活动基本信息
         Benefit benefit =  benefitService.getById(id);
-        Map<String,Object> resultMap = Maps.newHashMap();
-        resultMap.put("benefit",benefit);
+        BenefitDetailVO benefitDetailVO = new BenefitDetailVO();
+        BeanUtils.copyProperties(benefit,benefitDetailVO);
+        if(benefit.getVoteEndTime() !=null && new Date().before(benefit.getVoteEndTime())){
+            resultMap.put("canVote",1);
+        }else{
+            resultMap.put("canVote",0);
+        }
+
+        resultMap.put("benefit",benefitDetailVO);
         //查询活动进展
         List<BenefitActivity> benefitActivities = benefitActivityService.list(new QueryWrapper<BenefitActivity>().eq("benefit_id",id).orderByAsc("sort_num"));
         resultMap.put("progress",benefitActivities == null ? Collections.emptyList():benefitActivities);

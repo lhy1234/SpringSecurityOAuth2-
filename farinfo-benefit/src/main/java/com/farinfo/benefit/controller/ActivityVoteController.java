@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,6 +39,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/activityVote")
 public class ActivityVoteController {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Autowired
     private RedisUtil redisUtil;

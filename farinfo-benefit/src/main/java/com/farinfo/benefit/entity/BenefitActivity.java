@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,6 +38,7 @@ public class BenefitActivity implements Serializable {
     @ApiModelProperty(value = "外键关联公益基础表")
     private Integer benefitId;
 
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "进展创建时间")
     private Date createTime;
 

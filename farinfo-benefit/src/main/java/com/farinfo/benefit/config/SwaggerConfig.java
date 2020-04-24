@@ -35,10 +35,10 @@ public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
         //添加head参数start
-//        ParameterBuilder tokenPar = new ParameterBuilder();
-//        List<Parameter> pars = new ArrayList<Parameter>();
-//        tokenPar.name("Authentication").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-//        pars.add(tokenPar.build());
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        List<Parameter> pars = new ArrayList<Parameter>();
+        tokenPar.name("Authentication").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        pars.add(tokenPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
@@ -47,7 +47,7 @@ public class SwaggerConfig {
                 .apis(basePackage("com.farinfo.benefit.controller;"))
                 .paths(PathSelectors.any())
                 .build()
-                /*.globalOperationParameters(pars)*/;
+                .globalOperationParameters(pars);
     }
 
     private ApiInfo apiInfo() {

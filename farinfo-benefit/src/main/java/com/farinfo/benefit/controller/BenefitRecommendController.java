@@ -8,12 +8,14 @@ import com.farinfo.benefit.entity.BenefitRecommend;
 import com.farinfo.benefit.enums.ErrorEnum;
 import com.farinfo.benefit.service.BenefitRecommendService;
 import com.farinfo.benefit.service.BenefitService;
+import com.farinfo.benefit.utils.UserHelper;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,34 +35,55 @@ import java.util.Map;
 public class BenefitRecommendController {
 
     @Autowired
+    private HttpServletRequest request;
+
+
+    @Autowired
     private BenefitRecommendService benefitRecommendService;
 
     @Autowired
     private BenefitService benefitService;
 
+
+    @ApiOperation("用户信息")
+    @GetMapping("/userInfo")
+    public Result userInfo() {
+        Integer userId = UserHelper.getUserId(request);
+        Map<String, Object> resultMap = Maps.newHashMap();
+        //参与基金活动(次)
+        int activityNum = benefitRecommendService.countMyActivityNum(userId);
+        //推荐人次(人)
+        int recommendNum = benefitRecommendService.countMyRecommendNum(userId);
+        resultMap.put("activityNum", activityNum);
+        resultMap.put("recommendNum", recommendNum);
+        resultMap.put("userNick", "乡村小河");
+        resultMap.put("headImg", "");
+        return Result.ok(resultMap);
+    }
+
     /**
-     * TODO：ID处理
+     *
      *
      * @return
      */
     @ApiOperation("我的公益账户")
-    @GetMapping("/myLoveAccount/{recommendId}")
-    public Result myLoveAccount(@PathVariable("recommendId") int recommendId) {
-
+    @GetMapping("/myLoveAccount")
+    public Result myLoveAccount() {
+        Integer userId = UserHelper.getUserId(request);
         Map<String, Object> resultMap = Maps.newHashMap();
         //参与基金活动(次)
-        int activityNum = benefitRecommendService.countMyActivityNum(recommendId);
+        int activityNum = benefitRecommendService.countMyActivityNum(userId);
         //推荐人次(人)
-        int recommendNum = benefitRecommendService.countMyRecommendNum(recommendId);
+        int recommendNum = benefitRecommendService.countMyRecommendNum(userId);
         resultMap.put("activityNum", activityNum);
         resultMap.put("recommendNum", recommendNum);
 
         //查询我参与过的公益列表
-        List<MyRecommendVO> benefitList = benefitRecommendService.findMyRecommendVOListByRecommendId(recommendId);
+        List<MyRecommendVO> benefitList = benefitRecommendService.findMyRecommendVOListByRecommendId(userId);
         if (benefitList != null && !benefitList.isEmpty()) {
             for (MyRecommendVO vo : benefitList) {
                 //查询每次活动我推荐的志愿者和医护人员列表
-                List<BenefitRecommend> recommends = benefitRecommendService.findRecommendListByRecommendIdAndBenefitId(recommendId, vo.getBenefitId());
+                List<BenefitRecommend> recommends = benefitRecommendService.findRecommendListByRecommendIdAndBenefitId(userId, vo.getBenefitId());
                 vo.setRecommends(recommends);
             }
             resultMap.put("list", benefitList);
@@ -79,6 +102,11 @@ public class BenefitRecommendController {
     @PostMapping("/recommendDoctor")
     //public Result recommendDoctor(@RequestBody List<BenefitRecommend> entityList){
     public Result recommendDoctor(@RequestBody Map<String, List<BenefitRecommend>> paramMap) {
+
+
+
+
+        Integer userId = UserHelper.getUserId(request);
         List<BenefitRecommend> entityList = paramMap.get("entityList");
         if (entityList != null && !entityList.isEmpty()) {
             for (BenefitRecommend entity : entityList) {
@@ -86,6 +114,7 @@ public class BenefitRecommendController {
                 entity.setType(1);
                 entity.setCreateTime(new Date());
                 entity.setTicketCount(0);
+                entity.setRecommendId(userId);
             }
             benefitRecommendService.saveBatch(entityList);
             return Result.ok("保存成功");
@@ -97,6 +126,8 @@ public class BenefitRecommendController {
     @PostMapping("/recommendSubject")
 //    public Result save(@RequestBody List<BenefitRecommend> entityList) {
     public Result recommendSubject(@RequestBody Map<String, List<BenefitRecommend>> paramMap) {
+        Integer userId = UserHelper.getUserId(request);
+
         List<BenefitRecommend> entityList = paramMap.get("entityList");
         if (entityList != null && !entityList.isEmpty()) {
             for (BenefitRecommend entity : entityList) {
@@ -104,6 +135,7 @@ public class BenefitRecommendController {
                 entity.setType(2);
                 entity.setCreateTime(new Date());
                 entity.setTicketCount(0);
+                entity.setRecommendId(userId);
             }
             benefitRecommendService.saveBatch(entityList);
             return Result.ok("保存成功");
@@ -118,8 +150,9 @@ public class BenefitRecommendController {
      * @return
      */
     @ApiOperation("我的推荐")
-    @GetMapping("/myRecommend/{userId}")
-    public Result myRecommend(@PathVariable("userId") int userId) {
+    @GetMapping("/myRecommend")
+    public Result myRecommend() {
+        Integer userId = UserHelper.getUserId(request);
 
         List<BenefitRecommend> doctors = benefitRecommendService.list(new QueryWrapper<BenefitRecommend>()
                 .eq("recommend_id", userId)
