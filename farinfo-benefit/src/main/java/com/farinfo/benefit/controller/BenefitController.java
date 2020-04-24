@@ -11,6 +11,7 @@ import com.farinfo.benefit.beans.vo.SimpleBenefitVO;
 import com.farinfo.benefit.entity.Benefit;
 import com.farinfo.benefit.entity.BenefitActivity;
 import com.farinfo.benefit.entity.BenefitRecommend;
+import com.farinfo.benefit.enums.AuditStatusEnum;
 import com.farinfo.benefit.service.BenefitActivityService;
 import com.farinfo.benefit.service.BenefitRecommendService;
 import com.farinfo.benefit.service.BenefitService;
@@ -102,12 +103,14 @@ public class BenefitController {
         List<BenefitRecommend> doctors = benefitRecommendService.list(new QueryWrapper<BenefitRecommend>()
                 .eq("benefit_id",id)
                 .eq("type",1)
+                .eq("audit_status", AuditStatusEnum.NOPASS.value())
                 .orderByAsc("create_time"));
         resultMap.put("doctors",doctors == null ? Collections.emptyList():doctors);
         //志愿者
         List<BenefitRecommend> subjects = benefitRecommendService.list(new QueryWrapper<BenefitRecommend>()
                 .eq("benefit_id",id)
                 .eq("type",2)
+                .eq("audit_status",AuditStatusEnum.NOPASS.value())
                 .orderByAsc("create_time"));
         resultMap.put("subjects",subjects == null ? Collections.emptyList():subjects);
 

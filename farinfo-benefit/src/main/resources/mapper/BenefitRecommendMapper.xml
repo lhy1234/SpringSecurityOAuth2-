@@ -18,13 +18,14 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="money" property="money"/>
+        <result column="audit_status" property="auditStatus"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, benefit_id, real_name, org_name , clinical_department,
         duty, introduction, head_pic, type, recommend_id, ticket_count,
-        create_time,update_time,money
+        create_time,update_time,money,audit_status
     </sql>
 
     <!--查询我参与过的活动的id，name列表-->

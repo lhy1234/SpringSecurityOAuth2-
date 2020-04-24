@@ -76,5 +76,7 @@ public class BenefitRecommend implements Serializable {
     @ApiModelProperty(value = "金额")
     private String money;
 
+    @ApiModelProperty(value = "审核状态0待审核1通过2不通过")
+    private Integer auditStatus;
 
 }
