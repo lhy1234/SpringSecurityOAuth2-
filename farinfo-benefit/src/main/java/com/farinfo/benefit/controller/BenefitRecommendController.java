@@ -1,11 +1,15 @@
 package com.farinfo.benefit.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.farinfo.api.user.dto.UserDTO;
 import com.farinfo.benefit.beans.Result;
 import com.farinfo.benefit.beans.vo.MyRecommendVO;
 import com.farinfo.benefit.entity.Benefit;
 import com.farinfo.benefit.entity.BenefitRecommend;
 import com.farinfo.benefit.enums.ErrorEnum;
+import com.farinfo.benefit.feignClient.UserFacadeImpl;
 import com.farinfo.benefit.service.BenefitRecommendService;
 import com.farinfo.benefit.service.BenefitService;
 import com.farinfo.benefit.utils.UserHelper;
@@ -37,6 +41,9 @@ public class BenefitRecommendController {
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private UserFacadeImpl userFacade;
+
 
     @Autowired
     private BenefitRecommendService benefitRecommendService;
@@ -44,7 +51,10 @@ public class BenefitRecommendController {
     @Autowired
     private BenefitService benefitService;
 
-
+    /**
+     * 头像，姓名，身份（是否是医生）
+     * @return
+     */
     @ApiOperation("用户信息")
     @GetMapping("/userInfo")
     public Result userInfo() {
@@ -56,8 +66,14 @@ public class BenefitRecommendController {
         int recommendNum = benefitRecommendService.countMyRecommendNum(userId);
         resultMap.put("activityNum", activityNum);
         resultMap.put("recommendNum", recommendNum);
-        resultMap.put("userNick", "乡村小河");
-        resultMap.put("headImg", "");
+        UserDTO userDTO = userFacade.getInfoById(273);
+        if(userDTO != null){
+            resultMap.put("userNick", userDTO.getRealName());
+            resultMap.put("headImg", userDTO.getHeadImgUrl());
+        }else {
+            resultMap.put("userNick", "");
+            resultMap.put("headImg", "");
+        }
         return Result.ok(resultMap);
     }
 

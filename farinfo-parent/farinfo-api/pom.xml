@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.farinfo</groupId>
+
     <artifactId>farinfo-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+
 
     <parent>
         <groupId>com.farinfo</groupId>
@@ -20,11 +20,7 @@
     </properties>
 
     <dependencies>
-        <!--&lt;!&ndash;OAuth2&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.cloud</groupId>-->
-        <!--<artifactId>spring-cloud-starter-oauth2</artifactId>-->
-        <!--</dependency>-->
+
 
         <!--lombok-->
         <dependency>
@@ -32,20 +28,13 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+
+        <!--对外公共接口，要依赖web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.64</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
 
     </dependencies>
 

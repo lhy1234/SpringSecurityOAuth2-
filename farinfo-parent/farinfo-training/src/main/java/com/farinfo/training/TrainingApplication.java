@@ -2,9 +2,12 @@ package com.farinfo.training;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableResourceServer  //资源服务器一定要标这个
+@EnableFeignClients
+@EnableEurekaClient
+//@EnableResourceServer  //资源服务器一定要标这个
 @SpringBootApplication
 public class TrainingApplication {
 

@@ -2,6 +2,7 @@ package com.farinfo.benefit.controller;
 
 import com.farinfo.benefit.beans.dto.Course;
 import com.farinfo.benefit.entity.SysUser;
+import com.farinfo.benefit.service.UserConsumerService;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/testCourse")
 public class TestCourseController {
+
+
+    @Autowired
+    private UserConsumerService userConsumerService;
 
     //OAuth2RestTemplate：
     //会从请求的上下文里拿到令牌，放到请求头里，发出去。
@@ -58,4 +63,10 @@ public class TestCourseController {
         return ReflectionToStringBuilder.toString(user);
     }
 
+
+    @GetMapping(value = "/getSysUser")
+    public com.farinfo.api.user.SysUser getSysUser() {
+        com.farinfo.api.user.SysUser sysUser = userConsumerService.getById(101L);
+        return sysUser;
+    }
 }

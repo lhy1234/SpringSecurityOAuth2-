@@ -1,10 +1,9 @@
 package com.farinfo.auth.server;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.farinfo.auth.entity.SysUser;
-import com.farinfo.auth.service.SysUserService;
+import com.farinfo.entity.SysUser;
+import com.farinfo.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  *

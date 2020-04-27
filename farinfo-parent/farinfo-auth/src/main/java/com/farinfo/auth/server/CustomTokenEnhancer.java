@@ -1,11 +1,10 @@
 package com.farinfo.auth.server;
 
-import com.farinfo.auth.entity.SysUser;
+import com.farinfo.entity.SysUser;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;

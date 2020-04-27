@@ -24,6 +24,7 @@
         <qc.cos.version>5.6.5</qc.cos.version>
         <swagger2.version>2.9.2</swagger2.version>
         <swaggerui.version>2.9.2</swaggerui.version>
+        <fastjson.version>1.2.68</fastjson.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
 
@@ -42,11 +43,36 @@
 
     <dependencies>
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-            <!--<version>2.2.2.RELEASE</version>-->
-        <!--</dependency>-->
+        <!--open feign-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>2.2.2.RELEASE</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.farinfo</groupId>
+            <artifactId>farinfo-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!--fastjson-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -164,6 +190,9 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <!-- 打包跳过测试 -->
@@ -181,5 +210,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <!--注意限定版本一定为RELEASE,因为上传的对应仓库的存储类型为RELEASE -->
+    <!--指定仓库地址 -->
+    <distributionManagement>
+        <repository>
+            <!--此名称要和.m2/settings.xml中设置的ID一致 -->
+            <id>farinfo</id>
+            <url>http://192.168.1.202:8081/repository/farinfo-release/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
