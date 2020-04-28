@@ -22,7 +22,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtVerifyInterceptor)
-                .addPathPatterns("/**");
+                .addPathPatterns("/**") // 静态资源
+                .excludePathPatterns("/js/**", "/css/**", "/images/**", "/lib/**",
+                        "/fonts/**")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**",
+                        "/v2/**", "/swagger-ui.html/**");
     }
 
 //    private List<String> buildLogin(){

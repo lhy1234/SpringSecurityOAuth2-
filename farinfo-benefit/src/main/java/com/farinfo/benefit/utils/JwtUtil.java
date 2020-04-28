@@ -74,8 +74,9 @@ public class JwtUtil {
         JwtUtil jwtUtil = new JwtUtil();
         jwtUtil.setKey("Farinfo520");
         jwtUtil.setTtl(100000000000L);
-        String jwt = jwtUtil.createJwt("123","123");
+        String jwt = jwtUtil.createJwt("273","1，4，5");
         System.err.println(jwt);
+        //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNzMiLCJzdWIiOiIx77yMNO-8jDUiLCJpYXQiOjE1ODc5NjU5NjksImV4cCI6MTY4Nzk2NTk2OX0.mnwzRjFTXiiLoCjWYYYr-l8FxhexiMdcuUGtvbjxaT0
     }
 
 

@@ -20,10 +20,13 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -80,9 +83,17 @@ public class BenefitController {
      */
     @ApiOperation("查询活动详情")
     @GetMapping("/detail/{id}")
-    public Result detail(@PathVariable("id") int id){
+    public Result detail(HttpServletRequest request,@PathVariable("id") int id){
         Map<String,Object> resultMap = Maps.newHashMap();
-        resultMap.put("isDoctor",RandomUtils.nextInt()%2==0?1:0);
+
+        String rolesStr = (String)request.getAttribute("roles");
+        if(StringUtils.contains(rolesStr,"4")){
+            //是否是医生
+            resultMap.put("isDoctor",1);
+        }else {
+            resultMap.put("isDoctor",0);
+        }
+
 
         //活动基本信息
         Benefit benefit =  benefitService.getById(id);

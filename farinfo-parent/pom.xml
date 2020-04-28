@@ -19,6 +19,7 @@
         <module>farinfo-api</module>
         <module>farinfo-register</module>
         <module>farinfo-training</module>
+        <module>farinfo-common</module>
     </modules>
 
     <properties>

@@ -32,7 +32,7 @@ import java.util.Map;
  * @author
  * @since 2020-04-17
  */
-
+@SuppressWarnings("all")
 @Api(tags = "公益推荐表")
 @RestController
 @RequestMapping("/benefitRecommend")
@@ -57,6 +57,7 @@ public class BenefitRecommendController {
      */
     @ApiOperation("用户信息")
     @GetMapping("/userInfo")
+
     public Result userInfo() {
         Integer userId = UserHelper.getUserId(request);
         Map<String, Object> resultMap = Maps.newHashMap();
@@ -66,10 +67,10 @@ public class BenefitRecommendController {
         int recommendNum = benefitRecommendService.countMyRecommendNum(userId);
         resultMap.put("activityNum", activityNum);
         resultMap.put("recommendNum", recommendNum);
-        UserDTO userDTO = userFacade.getInfoById(273);
+        UserDTO userDTO = userFacade.getInfoById(userId);
         if(userDTO != null){
-            resultMap.put("userNick", userDTO.getRealName());
-            resultMap.put("headImg", userDTO.getHeadImgUrl());
+            resultMap.put("userNick", userDTO.getWxNick());
+            resultMap.put("headImg", userDTO.getWxHeadImgUrl());
         }else {
             resultMap.put("userNick", "");
             resultMap.put("headImg", "");
@@ -119,14 +120,14 @@ public class BenefitRecommendController {
     //public Result recommendDoctor(@RequestBody List<BenefitRecommend> entityList){
     public Result recommendDoctor(@RequestBody Map<String, List<BenefitRecommend>> paramMap) {
 
-
-
-
         Integer userId = UserHelper.getUserId(request);
+        UserDTO userDTO = userFacade.getInfoById(userId);
+        String orgName = userDTO!=null?userDTO.getOrgName():"";
+
         List<BenefitRecommend> entityList = paramMap.get("entityList");
         if (entityList != null && !entityList.isEmpty()) {
             for (BenefitRecommend entity : entityList) {
-                entity.setOrgName("北京医科大学附属第三医院阜外医院第二分院");
+                entity.setOrgName(orgName);
                 entity.setType(1);
                 entity.setCreateTime(new Date());
                 entity.setTicketCount(0);

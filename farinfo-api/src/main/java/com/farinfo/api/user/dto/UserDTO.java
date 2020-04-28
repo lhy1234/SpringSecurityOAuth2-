@@ -9,9 +9,19 @@ import lombok.Data;
 public class UserDTO {
 
 
-    private Integer id;
+    private int id;
+
+    private String userNick;
+
+    private String wxNick;
+
+    private int sex;
 
     private String realName;
 
-    private String headImgUrl;
+    private String wxHeadImgUrl;
+
+
+    private String orgName;
+
 }

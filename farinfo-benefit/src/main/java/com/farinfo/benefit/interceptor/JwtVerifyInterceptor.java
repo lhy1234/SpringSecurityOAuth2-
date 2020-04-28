@@ -55,7 +55,7 @@ public class JwtVerifyInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
             request.setAttribute("userId",claims.get("jti"));
-            request.setAttribute("loginName",claims.get("sub"));
+            request.setAttribute("roles",claims.get("sub")); //角色 有4说明是医生
             return true;
         }catch (Exception e){
             log.error("[登录拦截器] token 解析失败 ，token:{}",e);
