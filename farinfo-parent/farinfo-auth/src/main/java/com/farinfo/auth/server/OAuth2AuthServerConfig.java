@@ -43,7 +43,7 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
     //tokenStore是进行存取token的接口，默认内存的实现还有redis，jdbc，jwt的实现
     @Bean
     public TokenStore tokenStore(){
-        return new JwtTokenStore(jwtTokenEnhancer());//jwt存取token
+        return new JwtTokenStore(accessTokenConverter());//jwt存取token
     }
     //Token增强，添加额外参数
     @Bean
@@ -52,9 +52,10 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
     }
 
 
+    //  JwtAccessToken转换器
     //  这里必须声明为 public的@Bean 才能把拿jwt解析的key的服务暴露出去，否则资源服务器会报异常
     @Bean
-    public JwtAccessTokenConverter jwtTokenEnhancer() {
+    public JwtAccessTokenConverter accessTokenConverter() {
         /**
          * 对jwt进行签名的key，jwt是明文，签名防篡改。
          * 接收token的人需要用同样的key验签名，需要把这个key通过服务暴漏出去，使用服务的人才能拿到key
@@ -89,18 +90,17 @@ public class OAuth2AuthServerConfig extends AuthorizationServerConfigurerAdapter
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-
-        // 将增强的token设置到增强链中
-        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
-        enhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer(), jwtTokenEnhancer()));
-
+        // 自定义token生成方式
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer(), accessTokenConverter()));
+        endpoints.tokenEnhancer(tokenEnhancerChain);
 
         //传给他一个authenticationManager用来校验传过来的用户信息是不是合法的,注进来一个，自己实现
         endpoints
                 //这里指定userDetailsService是专门给refresh_token用的，其他的四种授权模式不需要这个
                 .userDetailsService(userDetailsService)
                 .tokenStore(tokenStore()) //告诉服务器要用自定义的tokenStore里去存取token
-                .tokenEnhancer(enhancerChain)//token增强
+                .accessTokenConverter(accessTokenConverter())//token增强
                 .authenticationManager(authenticationManager)
 
                 ;

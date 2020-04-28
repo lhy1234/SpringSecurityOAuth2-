@@ -6,7 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * <p>
@@ -39,13 +42,17 @@ public class SysUserController {
 //        }}, HttpStatus.OK);
 //    }
 
-
-    @GetMapping("/user")
-    public SysUser me(OAuth2Authentication authentication){
-        Authentication oauth = authentication.getUserAuthentication();
-        SysUser user = (SysUser) oauth.getPrincipal();
+    @RequestMapping("/user")
+    public Principal user(Principal user) {
         return user;
     }
+
+//    @GetMapping("/user")
+//    public SysUser me(OAuth2Authentication authentication){
+//        Authentication oauth = authentication.getUserAuthentication();
+//        SysUser user = (SysUser) oauth.getPrincipal();
+//        return user;
+//    }
 
 }
 

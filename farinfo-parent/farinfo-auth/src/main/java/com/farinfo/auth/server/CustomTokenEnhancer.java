@@ -18,11 +18,13 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        Map<String,Object> extraInfo = new HashMap<>();
+
         SysUser sysUser = (SysUser)authentication.getPrincipal();
         //往token写额外信息
-        Map<String,Object> extraInfo = new HashMap<>();
-        extraInfo.put("user_id",sysUser.getId());
 
+        extraInfo.put("user_id",sysUser.getId());
+        extraInfo.put("authorities", sysUser.getAuthorities());
         ((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(extraInfo);
         return accessToken;
     }

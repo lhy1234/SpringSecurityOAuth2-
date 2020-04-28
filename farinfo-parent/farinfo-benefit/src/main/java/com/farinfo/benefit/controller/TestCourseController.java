@@ -56,11 +56,11 @@ public class TestCourseController {
     }
 
     @GetMapping(value = "/auth")
-    public String authDemo(OAuth2Authentication auth) {
+    public Object authDemo(OAuth2Authentication auth) {
         // 获取当前用户资源
-        Map user = (Map) auth.getPrincipal();
-
-        return ReflectionToStringBuilder.toString(user);
+        auth.getPrincipal();
+        System.err.println(ReflectionToStringBuilder.toString(auth));
+        return ReflectionToStringBuilder.toString(auth);
     }
 
 
