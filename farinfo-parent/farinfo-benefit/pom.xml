@@ -17,6 +17,13 @@
 
     <dependencies>
 
+
+        <dependency>
+            <groupId>com.farinfo</groupId>
+            <artifactId>farinfo-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!--OAuth2-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

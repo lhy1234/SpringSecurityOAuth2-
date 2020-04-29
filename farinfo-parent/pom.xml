@@ -20,6 +20,7 @@
         <module>farinfo-register</module>
         <module>farinfo-training</module>
         <module>farinfo-common</module>
+        <module>farinfo-filesys</module>
     </modules>
 
     <properties>
