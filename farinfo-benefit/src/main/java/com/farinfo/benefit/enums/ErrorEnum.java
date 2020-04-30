@@ -8,6 +8,8 @@ public enum  ErrorEnum {
     SUCCESS(200, "成功"),
     FAIL(500, "失败"),
 
+    EXCEPTION(444,"系统异常"),
+
 
     ACTIVITY_NOTEXIST(300,"活动不存在"),
 

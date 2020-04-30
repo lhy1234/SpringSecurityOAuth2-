@@ -16,6 +16,9 @@ import java.util.List;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+
+
+
     @Autowired
     private JwtVerifyInterceptor jwtVerifyInterceptor;
 

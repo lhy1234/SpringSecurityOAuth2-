@@ -118,12 +118,11 @@ public class BenefitRecommendController {
     @ApiOperation("推荐医护人员")
     @PostMapping("/recommendDoctor")
     //public Result recommendDoctor(@RequestBody List<BenefitRecommend> entityList){
-    public Result recommendDoctor(@RequestBody Map<String, List<BenefitRecommend>> paramMap) {
+    public Result recommendDoctor(@RequestBody Map<String, List<BenefitRecommend>> paramMap) throws Exception{
 
         Integer userId = UserHelper.getUserId(request);
         UserDTO userDTO = userFacade.getInfoById(userId);
-        String orgName = userDTO!=null?userDTO.getOrgName():"";
-
+        String orgName = userDTO.getOrgName();
         List<BenefitRecommend> entityList = paramMap.get("entityList");
         if (entityList != null && !entityList.isEmpty()) {
             for (BenefitRecommend entity : entityList) {

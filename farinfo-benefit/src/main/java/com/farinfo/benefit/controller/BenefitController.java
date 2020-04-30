@@ -1,6 +1,7 @@
 package com.farinfo.benefit.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -25,6 +26,7 @@ import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -61,9 +63,22 @@ public class BenefitController {
     @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize){
+
+        Map<String,Object> map = new HashMap<>();
+        /////// 查询公益地图得地图 ////////////////
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://47.93.189.238:8060/api/dataAdvResource/getById/34";
+        JSONObject jsonObject = restTemplate.getForObject(url, JSONObject.class);
+        if(jsonObject != null && StringUtils.equals(jsonObject.getString("code"),"0000")){
+            String img = jsonObject.getJSONObject("data").getString("resImgUrl");
+            map.put("img",img);
+        }else{
+            map.put("img","");
+        }
         Page<SimpleBenefitVO> page = new Page<>(pageNum,pageSize);
         IPage<SimpleBenefitVO> pageList = benefitService.pageQueryBenefitSimpleVO(page);
-        return Result.ok(pageList);
+        map.put("list",pageList);
+        return Result.ok(map);
     }
 
     /**
@@ -114,14 +129,14 @@ public class BenefitController {
         List<BenefitRecommend> doctors = benefitRecommendService.list(new QueryWrapper<BenefitRecommend>()
                 .eq("benefit_id",id)
                 .eq("type",1)
-                .eq("audit_status", AuditStatusEnum.NOPASS.value())
+                .eq("audit_status", AuditStatusEnum.PASS.value())
                 .orderByAsc("create_time"));
         resultMap.put("doctors",doctors == null ? Collections.emptyList():doctors);
         //志愿者
         List<BenefitRecommend> subjects = benefitRecommendService.list(new QueryWrapper<BenefitRecommend>()
                 .eq("benefit_id",id)
                 .eq("type",2)
-                .eq("audit_status",AuditStatusEnum.NOPASS.value())
+                .eq("audit_status",AuditStatusEnum.PASS.value())
                 .orderByAsc("create_time"));
         resultMap.put("subjects",subjects == null ? Collections.emptyList():subjects);
 
