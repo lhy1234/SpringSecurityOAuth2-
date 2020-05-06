@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farinfo.benefit.mapper.BenefitRecommendMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.farinfo.benefit.entity.BenefitRecommend">
+        <id column="id" property="id" />
+        <result column="benefit_id" property="benefitId" />
+        <result column="real_name" property="realName" />
+        <result column="org_name" property="orgName" />
+        <result column="clinical_department" property="clinicalDepartment" />
+        <result column="duty" property="duty" />
+        <result column="introduction" property="introduction" />
+        <result column="head_pic" property="headPic" />
+        <result column="type" property="type" />
+        <result column="recommend_id" property="recommendId" />
+        <result column="ticket_count" property="ticketCount" />
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="money" property="money"/>
+        <result column="audit_status" property="auditStatus"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, benefit_id, real_name, org_name , clinical_department,
+        duty, introduction, head_pic, type, recommend_id, ticket_count,
+        create_time,update_time,money,audit_status
+    </sql>
+
+    <!--查询我参与过的活动的id，name列表-->
+    <select id="findMyRecommendVOListByRecommendId" parameterType="int" resultType="com.farinfo.benefit.beans.vo.MyRecommendVO">
+        select id benefitId,title title from benefit where id in(
+        select distinct benefit_id from  `benefit_recommend` where recommend_id = #{recommendId} )
+        order by create_time desc
+    </select>
+    
+    <select id="findRecommendListByRecommendIdAndBenefitId" resultType="com.farinfo.benefit.entity.BenefitRecommend">
+        select
+            create_time createTime,
+            real_name  realName,
+            clinical_department clinicalDepartment ,
+            duty ,
+            `type`
+        from benefit_recommend
+        where
+            recommend_id = #{recommendId}
+        and benefit_id = #{benefitId}
+       order by create_time desc
+    </select>
+
+
+
+    <!--查询我参与的活动次数-->
+    <select id="countMyActivityNum" parameterType="int" resultType="int">
+        select count(*) from
+            (select distinct benefit_id from  `benefit_recommend` where recommend_id = #{recommendId})t
+    </select>
+
+    <!--查询我推荐的人数-->
+    <select id="countMyRecommendNum" parameterType="int" resultType="int">
+          select count(*) from  `benefit_recommend` where recommend_id = #{recommendId}
+    </select>
+</mapper>
