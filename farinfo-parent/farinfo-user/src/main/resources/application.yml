@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: farinfo-user
+
+server:
+  port: 8005
+
+
+
+#############eureka client config#####################
+eureka:
+  client:
+    #设置服务注册中心的URL
+    service-url:
+      defaultZone:  http://localhost:8761/eureka/
