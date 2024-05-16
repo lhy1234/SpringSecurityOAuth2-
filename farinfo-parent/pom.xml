@@ -44,7 +44,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <swaggerui.version>2.9.2</swaggerui.version>
         <joda-time.version>2.10.2</joda-time.version>
-        <hutools.version>5.0.6</hutools.version>
+        <hutools.version>5.8.21</hutools.version>
     </properties>
 
 
